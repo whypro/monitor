@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>822</width>
+    <height>606</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>视频监控异常处理系统</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QPushButton" name="open_button">
+          <property name="text">
+           <string>打开摄像头(&amp;C)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="shoot_button">
+          <property name="text">
+           <string>拍照(&amp;S)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="record_button">
+          <property name="text">
+           <string>录像(&amp;R)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="monitor_button">
+          <property name="text">
+           <string>开始监控(&amp;M)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="exit_button">
+          <property name="text">
+           <string>退出(&amp;X)</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="screen">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>640</width>
+          <height>480</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Panel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Sunken</enum>
+        </property>
+        <property name="text">
+         <string>1</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>822</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="file_menu">
+    <property name="title">
+     <string>文件(&amp;F)</string>
+    </property>
+    <addaction name="exit_action"/>
+   </widget>
+   <widget class="QMenu" name="tool_menu">
+    <property name="title">
+     <string>工具(&amp;T)</string>
+    </property>
+    <addaction name="open_action"/>
+    <addaction name="shoot_action"/>
+    <addaction name="record_action"/>
+   </widget>
+   <addaction name="file_menu"/>
+   <addaction name="tool_menu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="open_action">
+   <property name="text">
+    <string>打开摄像头(&amp;C)</string>
+   </property>
+  </action>
+  <action name="shoot_action">
+   <property name="text">
+    <string>拍照(&amp;S)</string>
+   </property>
+  </action>
+  <action name="record_action">
+   <property name="text">
+    <string>录像(&amp;R)</string>
+   </property>
+  </action>
+  <action name="exit_action">
+   <property name="text">
+    <string>退出(&amp;X)</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>exit_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>733</x>
+     <y>459</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>670</x>
+     <y>461</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
