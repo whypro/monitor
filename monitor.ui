@@ -87,6 +87,70 @@
          </widget>
         </item>
         <item>
+         <widget class="QRadioButton" name="visual_radio_1">
+          <property name="text">
+           <string>input</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="visual_radio_2">
+          <property name="text">
+           <string>frame_diff</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="visual_radio_3">
+          <property name="text">
+           <string>motion_hist</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="visual_radio_4">
+          <property name="text">
+           <string>grad_orient</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="threshold_label">
+          <property name="text">
+           <string>阈值</string>
+          </property>
+          <property name="buddy">
+           <cstring>threshold_spin</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="threshold_spin">
+          <property name="maximum">
+           <number>255</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="threshold_slider">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximum">
+           <number>255</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer name="verticalSpacer_4">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -197,12 +261,44 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>733</x>
-     <y>459</y>
+     <x>99</x>
+     <y>572</y>
     </hint>
     <hint type="destinationlabel">
      <x>670</x>
      <y>461</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>threshold_spin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>threshold_slider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>60</x>
+     <y>450</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>60</x>
+     <y>470</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>threshold_slider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>threshold_spin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>39</x>
+     <y>470</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>42</x>
+     <y>446</y>
     </hint>
    </hints>
   </connection>
