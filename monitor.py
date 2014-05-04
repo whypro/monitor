@@ -4,8 +4,9 @@ import os
 import sys
 import cv2
 import numpy as np
-from PyQt4.QtGui import QMainWindow, QImage, QPixmap, QApplication
+from PyQt4.QtGui import QMainWindow, QImage, QPixmap, QApplication, QSound
 from PyQt4.QtCore import QTimer
+from PyQt4.phonon import Phonon
 import datetime
 from ui_monitor import Ui_MainWindow
 from time import clock
@@ -36,6 +37,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.camera = cv2.VideoCapture()
         self.image = None
+        self.sound = QSound('alert.wav')
+        self.sound.setLoops(2)
 
         self.frame = None
         self.video = None
@@ -58,6 +61,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.threshold_label.setEnabled(False)
         self.threshold_spin.setEnabled(False)
         self.threshold_slider.setEnabled(False)
+        self.sound_check.setEnabled(False)
 
         self.open_button.clicked.connect(self.open_camera)
         self.shoot_button.clicked.connect(self.shoot)
@@ -166,6 +170,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.threshold_label.setEnabled(True)
         self.threshold_spin.setEnabled(True)
         self.threshold_slider.setEnabled(True)
+        self.sound_check.setEnabled(True)
 
         self.monitor_button.clicked.disconnect(self.start_monitor)
         self.monitor_button.clicked.connect(self.stop_monitor)
@@ -182,6 +187,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.threshold_label.setEnabled(False)
         self.threshold_spin.setEnabled(False)
         self.threshold_slider.setEnabled(False)
+        self.sound_check.setEnabled(False)
 
         self.monitor_button.clicked.disconnect(self.stop_monitor)
         self.monitor_button.clicked.connect(self.start_monitor)
@@ -235,7 +241,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             angle = cv2.calcGlobalOrientation(orient_roi, mask_roi, mhi_roi, timestamp, self.MHI_DURATION)
             color = ((255, 0, 0), (0, 0, 255))[i == 0]
             self.draw_motion_comp(vis, rect, angle, color)
-
+            if self.sound_check.isChecked() and i == 0:
+                self.play_sound()
         self.draw_str(vis, (20, 20), visual_name)
 
         self.prev_frame = self.frame.copy()
@@ -255,6 +262,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         cv2.putText(dst, s, (x+1, y+1), cv2.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), thickness = 2, lineType=cv2.CV_AA)
         cv2.putText(dst, s, (x, y), cv2.FONT_HERSHEY_PLAIN, 1.0, (255, 255, 255), lineType=cv2.CV_AA)
 
+    def play_sound(self):
+        if self.sound.isFinished():
+            self.sound.play()
+        # media_obj = Phonon.MediaObject()
+        # audio_output = Phonon.AudioOutput(Phonon.MusicCategory)
+        # Phonon.createPath(media_obj, audio_output)
+        # media_obj.setCurrentSource(Phonon.MediaSource("alert.wav"))
+        # print('play')
+        # media_obj.play()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
