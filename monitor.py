@@ -26,7 +26,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     VIDEO_FOLDER = 'video'
     PHOTO_FOLDER = 'photo'
 
-    MONITOR_DELAY = 5   # 单位为秒
+    DEFAULT_MONITOR_DELAY = 5   # 单位为秒
 
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -53,6 +53,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.is_monitoring = False
 
         self.threshold_spin.setValue(self.DEFAULT_THRESHOLD)
+        self.shoot_delay_spin.setValue(self.DEFAULT_MONITOR_DELAY)
 
         self.shoot_button.setEnabled(False)
         self.record_button.setEnabled(False)
@@ -66,6 +67,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.threshold_slider.setEnabled(False)
         self.record_check.setEnabled(False)
         self.shoot_check.setEnabled(False)
+        self.shoot_delay_label.setEnabled(False)
+        self.shoot_delay_spin.setEnabled(False)
+        self.shoot_delay_slider.setEnabled(False)
         self.sound_check.setEnabled(False)
 
         self.open_button.clicked.connect(self.open_camera)
@@ -80,8 +84,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.shoot_check.setChecked(False)
 
     def shoot_toggled(self):
-        if self.shoot_check.isChecked() and self.record_check.isChecked():
-            self.record_check.setChecked(False)
+        if not self.shoot_check.isChecked():
+            self.shoot_delay_spin.setEnabled(False)
+            self.shoot_delay_slider.setEnabled(False)
+        else:
+            self.shoot_delay_spin.setEnabled(True)
+            self.shoot_delay_slider.setEnabled(True)
+            if self.record_check.isChecked():
+                self.record_check.setChecked(False)
 
     def open_camera(self):
         self.camera.open(0)
@@ -187,6 +197,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.threshold_slider.setEnabled(True)
         self.record_check.setEnabled(True)
         self.shoot_check.setEnabled(True)
+        self.shoot_delay_label.setEnabled(True)
+        self.shoot_delay_spin.setEnabled(True)
+        self.shoot_delay_slider.setEnabled(True)
         self.sound_check.setEnabled(True)
 
         self.monitor_button.clicked.disconnect(self.start_monitor)
@@ -204,6 +217,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.threshold_label.setEnabled(False)
         self.threshold_spin.setEnabled(False)
         self.threshold_slider.setEnabled(False)
+        self.record_check.setEnabled(False)
+        self.shoot_check.setEnabled(False)
+        self.shoot_delay_label.setEnabled(False)
+        self.shoot_delay_spin.setEnabled(False)
+        self.shoot_delay_slider.setEnabled(False)
         self.sound_check.setEnabled(False)
 
         self.monitor_button.clicked.disconnect(self.stop_monitor)
@@ -265,7 +283,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 elif self.shoot_check.isChecked():
                     # print(self.monitor_last_shoot)
                     # print(clock())
-                    if (not self.monitor_last_shoot) or (clock() - self.monitor_last_shoot > self.MONITOR_DELAY):
+                    delay = self.shoot_delay_spin.value()
+                    if (not self.monitor_last_shoot) or (clock() - self.monitor_last_shoot >= delay):
                         self.shoot()
                         self.monitor_last_shoot = clock()
                 if self.sound_check.isChecked():
