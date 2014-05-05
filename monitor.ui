@@ -151,6 +151,23 @@
          </widget>
         </item>
         <item>
+         <widget class="QCheckBox" name="record_check">
+          <property name="text">
+           <string>录像</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="shoot_check">
+          <property name="text">
+           <string>拍照</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QCheckBox" name="sound_check">
           <property name="text">
            <string>播放警报</string>
@@ -287,12 +304,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>60</x>
-     <y>450</y>
+     <x>71</x>
+     <y>408</y>
     </hint>
     <hint type="destinationlabel">
-     <x>60</x>
-     <y>470</y>
+     <x>71</x>
+     <y>433</y>
     </hint>
    </hints>
   </connection>
@@ -303,12 +320,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>39</x>
-     <y>470</y>
+     <x>50</x>
+     <y>433</y>
     </hint>
     <hint type="destinationlabel">
-     <x>42</x>
-     <y>446</y>
+     <x>53</x>
+     <y>408</y>
     </hint>
    </hints>
   </connection>

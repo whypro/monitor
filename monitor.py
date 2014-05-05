@@ -6,7 +6,6 @@ import cv2
 import numpy as np
 from PyQt4.QtGui import QMainWindow, QImage, QPixmap, QApplication, QSound
 from PyQt4.QtCore import QTimer
-from PyQt4.phonon import Phonon
 import datetime
 from ui_monitor import Ui_MainWindow
 from time import clock
@@ -17,7 +16,7 @@ def CV_FOURCC(c1, c2, c3, c4):
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
-    INTERVAL = 1000/24
+    INTERVAL = 1000/24  # 单位为毫秒
 
     MHI_DURATION = 0.5
     DEFAULT_THRESHOLD = 32
@@ -26,6 +25,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     VIDEO_FOLDER = 'video'
     PHOTO_FOLDER = 'photo'
+
+    MONITOR_DELAY = 5   # 单位为秒
 
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -39,6 +40,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.image = None
         self.sound = QSound('alert.wav')
         self.sound.setLoops(2)
+
+        self.monitor_last_shoot = None
 
         self.frame = None
         self.video = None
@@ -61,12 +64,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.threshold_label.setEnabled(False)
         self.threshold_spin.setEnabled(False)
         self.threshold_slider.setEnabled(False)
+        self.record_check.setEnabled(False)
+        self.shoot_check.setEnabled(False)
         self.sound_check.setEnabled(False)
 
         self.open_button.clicked.connect(self.open_camera)
         self.shoot_button.clicked.connect(self.shoot)
         self.record_button.clicked.connect(self.start_record)
         self.monitor_button.clicked.connect(self.start_monitor)
+        self.record_check.toggled.connect(self.record_toggled)
+        self.shoot_check.toggled.connect(self.shoot_toggled)
+
+    def record_toggled(self):
+        if self.record_check.isChecked() and self.shoot_check.isChecked():
+            self.shoot_check.setChecked(False)
+
+    def shoot_toggled(self):
+        if self.shoot_check.isChecked() and self.record_check.isChecked():
+            self.record_check.setChecked(False)
 
     def open_camera(self):
         self.camera.open(0)
@@ -170,6 +185,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.threshold_label.setEnabled(True)
         self.threshold_spin.setEnabled(True)
         self.threshold_slider.setEnabled(True)
+        self.record_check.setEnabled(True)
+        self.shoot_check.setEnabled(True)
         self.sound_check.setEnabled(True)
 
         self.monitor_button.clicked.disconnect(self.start_monitor)
@@ -241,8 +258,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             angle = cv2.calcGlobalOrientation(orient_roi, mask_roi, mhi_roi, timestamp, self.MHI_DURATION)
             color = ((255, 0, 0), (0, 0, 255))[i == 0]
             self.draw_motion_comp(vis, rect, angle, color)
-            if self.sound_check.isChecked() and i == 0:
-                self.play_sound()
+            if i == 0:
+                # 检测到目标运动
+                if self.record_check.isChecked():
+                    pass
+                elif self.shoot_check.isChecked():
+                    # print(self.monitor_last_shoot)
+                    # print(clock())
+                    if (not self.monitor_last_shoot) or (clock() - self.monitor_last_shoot > self.MONITOR_DELAY):
+                        self.shoot()
+                        self.monitor_last_shoot = clock()
+                if self.sound_check.isChecked():
+                    self.play_sound()
         self.draw_str(vis, (20, 20), visual_name)
 
         self.prev_frame = self.frame.copy()
