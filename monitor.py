@@ -82,14 +82,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def record_toggled(self):
         if self.record_check.isChecked() and self.shoot_check.isChecked():
             self.shoot_check.setChecked(False)
+            self.monitor_last_shoot = clock()
+            self.shoot_delay_label.setText('录像最短时间')
+        if not self.record_check.isChecked() and self.is_recording:
+            self.stop_record()
 
     def shoot_toggled(self):
-        if not self.shoot_check.isChecked():
-            self.shoot_delay_spin.setEnabled(False)
-            self.shoot_delay_slider.setEnabled(False)
-        else:
+        # if not self.shoot_check.isChecked():
+        #     self.shoot_delay_spin.setEnabled(False)
+        #     self.shoot_delay_slider.setEnabled(False)
+        if self.shoot_check.isChecked():
             self.shoot_delay_spin.setEnabled(True)
             self.shoot_delay_slider.setEnabled(True)
+            self.shoot_delay_label.setText('拍照间隔')
             if self.record_check.isChecked():
                 self.record_check.setChecked(False)
 
@@ -166,8 +171,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.is_recording:
             #frame = cv2.flip(frame, 0)
             self.video.write(frame)
-        elif self.is_monitoring:
+        if self.is_monitoring:
             frame = self.detect()
+
+            if self.is_recording:
+                delay = self.shoot_delay_spin.value()
+                print(clock() - self.monitor_last_shoot)
+                if clock() - self.monitor_last_shoot >= delay:
+                    self.stop_record()
 
         self.display(frame)
 
@@ -188,6 +199,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.is_monitoring = True
         self.monitor_button.setText('停止监控(&M)')
 
+        self.record_button.setEnabled(False)
         self.visual_radio_1.setEnabled(True)
         self.visual_radio_2.setEnabled(True)
         self.visual_radio_3.setEnabled(True)
@@ -279,7 +291,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if i == 0:
                 # 检测到目标运动
                 if self.record_check.isChecked():
-                    pass
+                    self.monitor_last_shoot = clock()
+                    if not self.is_recording:
+                        self.start_record()
                 elif self.shoot_check.isChecked():
                     # print(self.monitor_last_shoot)
                     # print(clock())
@@ -289,6 +303,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         self.monitor_last_shoot = clock()
                 if self.sound_check.isChecked():
                     self.play_sound()
+
         self.draw_str(vis, (20, 20), visual_name)
 
         self.prev_frame = self.frame.copy()
