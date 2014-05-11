@@ -220,8 +220,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def stop_monitor(self):
         print('stop monitor...')
         self.is_monitoring = False
+        if self.is_recording:
+            self.stop_record()
+
         self.monitor_button.setText('开始监控(&M)')
 
+        self.record_button.setEnabled(True)
         self.visual_radio_1.setEnabled(False)
         self.visual_radio_2.setEnabled(False)
         self.visual_radio_3.setEnabled(False)
