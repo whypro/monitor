@@ -245,9 +245,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def detect(self):
         # print('detect...')
-        visuals = ['input', 'frame_diff', 'motion_hist', 'grad_orient']
-        #cv2.createTrackbar('visual', 'motempl', 2, len(visuals)-1, nothing)
-        #cv2.createTrackbar('threshold', 'motempl', DEFAULT_THRESHOLD, 255, nothing)
+        # visuals = ['input', 'frame_diff', 'motion_hist', 'grad_orient']
+        # cv2.createTrackbar('visual', 'motempl', 2, len(visuals)-1, nothing)
+        # cv2.createTrackbar('threshold', 'motempl', DEFAULT_THRESHOLD, 255, nothing)
         height, width = self.frame.shape[:2]
         frame_diff = cv2.absdiff(self.frame, self.prev_frame)
         gray_diff = cv2.cvtColor(frame_diff, cv2.COLOR_BGR2GRAY)
